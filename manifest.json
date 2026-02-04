@@ -2,7 +2,7 @@
   "name": "Snaptube",
   "short_name": "Snaptube",
   "description": "Snaptube - Sistema de Otimização",
-  "start_url": "/",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
@@ -22,3 +22,4 @@
     }
   ]
 }
+
