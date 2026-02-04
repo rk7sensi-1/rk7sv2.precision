@@ -547,6 +547,12 @@ com qualquer arma</div>
         });
     </script>
 
+    <script>
+       if ("serviceWorker" in navigator) {
+       navigator.serviceWorker.register("./sw.js");
+      }
+     </script>
+
     <!-- PWA Installation Script -->
     <script>
         let deferredPrompt;
@@ -854,3 +860,4 @@ com qualquer arma</div>
     </script>
 </body>
 </html>
+
