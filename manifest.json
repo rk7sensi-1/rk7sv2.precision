@@ -1,5 +1,5 @@
 {
-  "name": "Snaptube - Precision",
+  "name": "Snaptube",
   "short_name": "Snaptube",
   "description": "Snaptube Precision - Sistema de Otimização",
   "start_url": "/",
@@ -21,4 +21,5 @@
       "purpose": "any maskable"
     }
   ]
+
 }
