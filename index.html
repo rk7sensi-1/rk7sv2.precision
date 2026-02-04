@@ -10,7 +10,8 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-192.png">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <title>Snaptube - Precision</title>
+    <script src="engine.js"></script>
+    <title>Snaptube</title>
     <style>
         * {
             margin: 0;
@@ -730,18 +731,58 @@ com qualquer arma</div>
             }
         });
 
+        // Function to open game
+        function abrirJogo(){
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const nome = "Free Fire"; // Pode alterar para "FF MAX" se necessário
+            
+            if (nome === "Free Fire") {
+                if (/android/i.test(ua)) {
+                    window.location.href = "intent://#Intent;package=com.dts.freefireth;scheme=freefire;end";
+                    setTimeout(function() {
+                        window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefireth";
+                    }, 2000);
+                } else if (/iPad|iPhone|iPod/.test(ua)) {
+                    window.location.href = "freefire://";
+                    setTimeout(function() {
+                        window.location.href = "https://apps.apple.com/br/app/free-fire/id1300146617";
+                    }, 2000);
+                }
+            } else if (nome === "FF MAX") {
+                if (/android/i.test(ua)) {
+                    window.location.href = "intent://#Intent;package=com.dts.freefiremax;scheme=freefiremax;end";
+                    setTimeout(function() {
+                        window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefiremax";
+                    }, 2000);
+                } else if (/iPad|iPhone|iPod/.test(ua)) {
+                    window.location.href = "freefiremax://";
+                    setTimeout(function() {
+                        window.location.href = "https://apps.apple.com/br/app/free-fire-max/id1444963002";
+                    }, 2000);
+                }
+            }
+        }
+
         // Inject button
         btnInject.addEventListener('click', () => {
             const functions = [];
+            const engineConfig = {
+                precisaoFull: false,
+                regedit: false,
+                otimizacao: false
+            };
             
             if (toggleAimbot.classList.contains('active')) {
                 functions.push('Precisão Full');
+                engineConfig.precisaoFull = true;
             }
             if (toggleRegedit.classList.contains('active')) {
                 functions.push('Regedit');
+                engineConfig.regedit = true;
             }
             if (toggleOptimization.classList.contains('active')) {
                 functions.push('Otimização');
+                engineConfig.otimizacao = true;
             }
 
             if (functions.length === 0) {
@@ -758,17 +799,57 @@ com qualquer arma</div>
                 return;
             }
 
+            // Disable button during injection
+            btnInject.disabled = true;
+            btnInject.innerText = 'INJETANDO...';
+            
             statusMessage.className = 'status-message loading';
-            statusMessage.innerText = 'Injetando funções...';
+            statusMessage.innerText = 'Inicializando Precision Engine...';
             
             setTimeout(() => {
-                statusMessage.className = 'status-message success';
-                statusMessage.innerText = `Funções injetadas: ${functions.join(', ')}`;
-                
-                setTimeout(() => {
-                    statusMessage.style.display = 'none';
-                }, 3000);
-            }, 2000);
+                // Inicializa o engine com as funções selecionadas
+                if (window.PrecisionEngine) {
+                    const success = window.PrecisionEngine.initialize(engineConfig);
+                    
+                    if (success) {
+                        statusMessage.className = 'status-message success';
+                        statusMessage.innerText = `✅ Funções injetadas: ${functions.join(', ')}`;
+                        
+                        console.log('[SNAPTUBE] Engine Status:', window.PrecisionEngine.getStatus());
+                        
+                        setTimeout(() => {
+                            statusMessage.innerText = '🎮 Abrindo o jogo...';
+                            
+                            setTimeout(() => {
+                                abrirJogo();
+                                btnInject.disabled = false;
+                                btnInject.innerText = 'INJETAR FUNÇÕES';
+                                
+                                // Mantém a mensagem de sucesso
+                                setTimeout(() => {
+                                    statusMessage.style.display = 'none';
+                                }, 2000);
+                            }, 1500);
+                        }, 2000);
+                    } else {
+                        statusMessage.className = 'status-message';
+                        statusMessage.innerText = '❌ Erro ao inicializar engine!';
+                        statusMessage.style.background = 'rgba(255, 68, 68, 0.1)';
+                        statusMessage.style.border = '1px solid #ff4444';
+                        statusMessage.style.color = '#ff4444';
+                        btnInject.disabled = false;
+                        btnInject.innerText = 'INJETAR FUNÇÕES';
+                    }
+                } else {
+                    statusMessage.className = 'status-message';
+                    statusMessage.innerText = '❌ Engine não encontrado!';
+                    statusMessage.style.background = 'rgba(255, 68, 68, 0.1)';
+                    statusMessage.style.border = '1px solid #ff4444';
+                    statusMessage.style.color = '#ff4444';
+                    btnInject.disabled = false;
+                    btnInject.innerText = 'INJETAR FUNÇÕES';
+                }
+            }, 1000);
         });
     </script>
 </body>
